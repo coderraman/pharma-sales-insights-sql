@@ -50,5 +50,4 @@ Where category = 'Injection' AND quantity > 50;
 Select * from "Pharma"
 WHERE order_date BETWEEN '2026-01-01' AND '2026-01-31';
 
-**Insight**
--- One month ke Total orders
+-- Insight: Jan 2026 mein total 19 orders aaye.
