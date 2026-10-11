@@ -48,4 +48,7 @@ Where category = 'Injection' AND quantity > 50;
 
 -- 7.	Jan 2026 ke orders dikhao (BETWEEN use karo).
 Select * from "Pharma"
-WHERE order_date Between '2026-01-01' AND '2026-01-31';
+WHERE order_date BETWEEN '2026-01-01' AND '2026-01-31';
+
+**Insight**
+-- One month ke Total orders
