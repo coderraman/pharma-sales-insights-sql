@@ -27,7 +27,7 @@ Select * from "Pharma";
 Select * from "Pharma"
 order by order_id Limit 10;
 
--- Insight : Query se Pharma Sale Table ki Top 10 Rows Product from 200 rows Vsual hota hain.
+-- Insight : Query se Pharma Sale Table ki Top 10 Rows Product from 200 rows Visual hota hain.
 
 -- Query.	Sirf order_id, salesname, product, total_amount columns dikhao.
 
@@ -60,7 +60,7 @@ Select * from "Pharma"
 Where total_amount > 10000
 order by total_amount DESC;
 
--- Insight: Query se Pharma Sales > 10k visual hoti hain, Total orders 34 and Top sale amount 55238.
+-- Insight: Query se Pharma Sales  > 10k amount visual hota hain, Total orders 34 and Top sale amount 55238.
 
 -- Query.	Sirf "Injection" category ke orders nikalo jinki quantity 50 se zyada hai.
 
@@ -68,7 +68,7 @@ order by total_amount DESC;
 Select * from "Pharma"
 Where category = 'Injection' AND quantity > 50;
 
--- Insight:  Query se Pharma Sale category'Injection' AND quantity > 50 Visual hoti hain, Total orders 9.
+-- Insight:  Query se Pharma Sale category'Injection' AND quantity > 50 data Visual hota hain, Total orders 9.
 
 -- Query.	Jan 2026 ke orders dikhao (BETWEEN use karo).
 
@@ -76,4 +76,4 @@ Where category = 'Injection' AND quantity > 50;
 Select * from "Pharma"
 WHERE order_date Between '2026-01-01' AND '2026-01-31';
 
--- Insight: Query se Pharma Sale ke one month ka orders data show hota hain, Order count 19 only in First Jan Month.
+-- Insight: Query se Pharma Sale ke one month ke orders ka data show hota hain, Order count 19 only in First Jan Month.
