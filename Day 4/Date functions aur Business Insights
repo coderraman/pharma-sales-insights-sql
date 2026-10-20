@@ -1,0 +1,38 @@
+-- Day 4: Date functions aur Business Insights
+
+-- 1.	Month-wise revenue nikalo (DATE_TRUNC('month', order_date) ya EXTRACT).
+
+Select Extract(Month From order_date) AS All_Months,
+Sum(total_amount) AS Total_Revenue
+From "Pharma"
+Group BY Extract(Month From Order_date)
+Order By All_Months;
+
+-- 2.	Kis din sabse zyada revenue aaya?
+Select order_date, sum(total_amount) As Revenue
+From "Pharma"
+Group By order_date
+Order By Revenue DESC
+Limit 1;
+
+-- 3.	Weekday-wise orders ka count (TO_CHAR(order_date, 'Day')).
+
+Select TO_CHAR(order_date, 'Day') As Week_Days,
+count(*) AS Total_Orders
+From "Pharma"
+Group By TO_CHAR(order_date, 'Day') 
+Order By Week_days;
+
+-- 4.	Region × Category ka revenue table (GROUP BY do columns pe).
+
+Select Region, Category, Sum(total_amount) As Revenue
+From "Pharma"
+Group By Region, Category
+Order By Region, Revenue DESC;
+
+-- 5.	Har region ka total revenue mein % share nikalo.
+Select Region, Sum(total_amount) As Ration_amount,
+CONCAT(Round((Sum(total_amount)/sum(sum(total_amount))OVER()) * 100,2),'%')AS Percent_Value
+From "Pharma"
+Group By Region
+Order By Percent_Value;
