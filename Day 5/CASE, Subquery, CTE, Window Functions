@@ -1,0 +1,93 @@
+Select
+CASE
+WHEN total_amount < 5000 THEN 'LOW'
+WHEN total_amount BETWEEN 5000 AND 15000 THEN 'MEDIUM'
+Else 'HIGH'
+END AS Order_Bucket,
+Count(*) As Bucket_count
+From "Pharma"
+Group By Order_Bucket
+Order By Order_Bucket;
+
+-- 2.	Wo orders nikalo jinka amount overall average se zyada hai (subquery).
+SELECT
+ORDER_ID,
+TOTAL_AMOUNT
+FROM
+"Pharma"
+WHERE
+TOTAL_AMOUNT > (
+	SELECT
+		AVG(TOTAL_AMOUNT)
+	FROM
+		"Pharma"
+);
+
+-- 3.	Har region ka top-selling product (ROW_NUMBER() ya RANK() with PARTITION BY).
+WITH Product_rev AS
+(Select Region, Product,
+Sum(total_amount) AS Revenue,
+ROW_NUMBER() OVER(
+PARTITION BY Region
+ORDER BY SUM(total_amount) DESC
+) AS RowNumbers
+	From "Pharma"
+Group BY Region, Product)
+Select Product, Region, Revenue
+from Product_rev 
+Where RowNumbers =1;
+
+
+-- 4.	Salespersons ko total revenue ke hisaab se rank karo (RANK() OVER).
+Select Salesname,
+Sum(total_amount) AS Revenue,
+RANK() OVER(
+ORDER BY SUM(total_amount) DESC
+) AS SalesRank
+From "Pharma"
+Group BY Salesname;
+
+-- 5.	Running total of revenue by date (SUM() OVER (ORDER BY order_date)).
+Select Order_date,
+SUM(total_amount) AS Daily_Revenue,
+SUM(SUM(total_amount)) OVER(ORDER BY Order_date) AS Running_Total
+From "Pharma"
+Group By order_date
+Order By Order_date;
+
+-- 6.	Month-over-month revenue growth % (LAG()).
+WITH month_Rev AS(
+	Select Date_Trunc('month', order_date) As order_month,
+	Sum(total_amount) AS MonthRevenue
+	From "Pharma"
+	Group By Date_trunc('month', order_date)
+	),
+  With_prev AS(
+	Select order_month,
+	MonthRevenue,
+	LAG(MonthRevenue) OVER(ORDER BY order_month) AS Prev_Month_Rev
+  From month_Rev
+  )
+  Select 
+  order_month,
+  MonthRevenue,
+  Prev_Month_Rev,	
+ ROUND(
+        (MonthRevenue - Prev_month_rev) * 100.0
+        / NULLIF(Prev_month_rev, 0),
+        2
+    ) AS growth_percent
+FROM with_prev
+ORDER BY order_month;
+
+-- 7.	CTE use karke wo salespersons nikalo jinka revenue team average se upar hai.
+
+WITH sales_cte AS(
+Select salesname,
+Sum(total_amount) As Revenue
+From "Pharma"
+GROUP BY Salesname
+)
+Select Salesname, Revenue
+From Sales_cte
+Where Revenue > (Select AVG(Revenue) From Sales_cte);
